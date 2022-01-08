@@ -6,18 +6,43 @@
 （5）`git commit -m "本次提交的说明（方便找到修改的记录）"`，（将暂存区所有内容提交到当前分支）
 （6）`git status` 命令，查看修改的结果。
 （7）`git diff` 命令，查看修改内容。
+```
+$git diff git.md 
+```
 （8）`git log` 命令显示从最近到最远的提交日志。加上--pretty=oneline参数。
+```
+$ git log --pretty=oneline
+72d062405ff56b2a9a078296cf5158ab0c991796 (HEAD -> master) I lost something
+8b5a46c114041eed81ac04505ee9c508cf47c427 merge dev with -no-ff
+
+72d062405...是commit id（版本号）
+```
 （9）`git reset --hard HEAD^` 命令，HEAD（是一个指针）表示当前版本，HEAD^表示上一个版本。也可以找到未来的版本的commit id ，就可以回到指定的某个版本。
+```
+$git reset --hard 72d062405
+回退到版本号为....的版本库
+```
 （10）`cat` 文件名 命令，查看文件内容。
 （11）`git reflog` 命令，记录每一次命令。
+```
+$ git reflog
+9a26f6e (HEAD -> master) HEAD@{0}: reset: moving to 9a26f6e927
+72d0624 HEAD@{1}: reset: moving to HEAD^
+9a26f6e (HEAD -> master) HEAD@{2}: reset: moving to 9a26f6e927
+72d0624 HEAD@{3}: reset: moving to HEAD^
+```
 2、工作区（Working Directory），一个设置为仓库的文件夹就是一个工作区。
 3、版本仓库（Repository），工作区中，一个隐藏目录.git，是Git的版本库。存储stage（暂存区），Git自动创建的第一个分支master，以及指向master的一个指针HEAD。
  ![版本仓库](./images/git_master.png)
 4、Git管理的是修改，每次修改的内容，先添加（add）到暂存区（stage）中，再提交（commit）。
-5、`git checkout -- 文件名`，将文件在工作区的修改全部撤销
+（2）`git diff HEAD -- git.md`查看工作区和版本库最新版本的差别
+5、`git checkout -- 文件名`，将文件在工作区的修改全部撤销。
+（1）如果文件修改后没有放到暂存区，撤销后，就回到版本库的状态
+（2）如果文件修改后添加到暂存区后，又做了修改，就回到添加暂存区后的状态。
+（3）`git reset HEAD git.md`可以将暂存区的修改撤销，重新放回工作区。
 6、rm 文件名 命令，将没用文件删了，使用该命令后使工作区和版本库不一致。
-7、`git rm` 文件名 命令，将文件从版本库中删除，并`git commit`。当在工作区中删错了，使用git checkout -- 文件名。
-8、`ssh-keygen -t rsa -C “youemail@example.com”`，创建SSH Key。
+（2）`git rm` 文件名 命令，将文件从版本库中删除，并`git commit`。当在工作区中删错了，使用`git checkout -- 文件名`使用版本库的文件替换工作区的文件.
+7、`ssh-keygen -t rsa -C “youemail@example.com”`，创建SSH Key。
 9、`git remote add origin https://github.com/sunyou-19/world.git`  命令将工作区与远程仓库连接，origin为远程库的名字
 10、`git push -u origin master` 将本地库的所有内容推送到远程库上。
 11、`git clone https://github.com/sunyou-19/world.git` 命令，克隆一个本地库。使用https速度慢，每次推送必须输入口令。还可以使用`git@github.com:sunyou-19/world.git` 地址。不同的协议。
