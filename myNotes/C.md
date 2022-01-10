@@ -79,3 +79,118 @@ int *p[10];  //指针数组，数组元素为int指针类型。
 const char keywords[] = {"abc","how","what"};
 int len = sizeof(keywords)/sizeof(keywords[0]); //通过sizeof可以求数组长度。sizeof计算变量所占字节
 ```
+*问题*
+>变量array1和array2有什么区别
+```
+void function(int array1[10])
+{
+    int array2[10];
+}
+int const a[] = {1,2,3,4};   //array read-only
+```
+15、字符串、字符和字节
+（1）库函数strlen的原型：`size_t strlen(char const *string)`，size_t是一个无符号整数类型。
+```
+char *x = "balabala";
+if (strlen(x) - 10 >= 0)  //左式为无符号数
+```
+（2）用于复制字符串的函数是strcpy
+`char *strcpy(char *dst, char const *src)`
+dest必须是字符数组或者是一个指向动态分配内存的数组指针，不能使用字符串常量。
+（3）连接字符串strcat，将一个字符串连接到另一个字符串的后面。
+`char *strcat(char *dst, char const *src);`
+（4）字符串比较strcmp，比较两个字符串对应的字符逐个进行比较，直到发现不匹配为止，
+`int strcmp(char const *s1, char const *s2)`
+如果s1小于s2，strcmp函数返回一个小于零的值，如果s1大于s2，函数返回一个大于零的值，如果两个字符串相等，函数就返回零。
+```
+char *strncpy(char *dst, char const *src, size_t len);         //其结果不会以NUL字节结尾  
+char *strncat(char *dst, char const *src, size_t len);
+int strncmp(char const *s1, char const *s2,size_t len);
+```
+（5）查找一个字符strchr和strrchr函数
+```
+char *strchr(char const *str, int ch);   //return a pointer to the first occurrence of ch, return NULL if ch is not in str;
+char *strrchr(char const *str, int ch);  //return a pointer to the last occurrence of ch, return NULL if ch is not in str;
+```
+（6）查找任何几个字符strpbrk，查找任何一组字符第一次在字符串中出现的位置。
+`char *strpbrk(char const *str, char const *group); `返回一个指向str中第1个匹配group中任何一个字符的字符位置。
+（7）查找一个字串strstr函数
+`char *strstr(char const *s1, char const *s2); `
+在s1中查找整个s2第1次出现的起始位置，并返回一个指向该位置的指针，如果s2没有在s1中出现，函数返回一个NULL指针。如果第二个参数是一个空字符串，函数就返回s1。
+（8）查找一个字符串前缀strspn和strcspn函数
+```
+size_t strspn(char const *str, char const *group);    //group字符串指定一个或多个字符，strspn返回str起始部分匹配group中任意字符的字符数。
+size_t strcspn(char const *str, char const *group);
+``` 
+（9）查找标记strtok函数
+`char *strtok(char *str, char const *sep)`
+sep是个字符串，定义了用作分隔符的字符集合
+strtok找到str的下一个标记，并将其用NUL结尾，然后返回一个指向这个标记的指针。
+（10）字符分类
+![](images/QQ截图20220110085314.png)
+（11）字符转换
+```
+int tolower(int ch);
+int toupper(int ch);
+```
+（12）内存操作。根据定义，字符串由一个NUL字节结尾，所以字符串内部不能包含任何NUL字符。
+```
+void *memcpy(void *dst, void const *src,size_t length);
+void *memmove(void *dst, void const *src,size_t length);
+void *memcmp(void const *a, void const *b,size_t length);
+void *memchr(void const *a, int ch,size_t length);
+void *memset(void *a, int ch, size_t length);
+```
+###结构与联合
+
+```
+struct abc{};   //abc是标签
+typedef struct {}abcd;   //adcd是类型名
+```
+（1）结构变量的成员是通过点操作符(.)访问的，点操作符接受两个操作数，左操作数就是结构变量的名字，右操作数就是需要访问的成员的名字。
+（2）结构的存储分配
+（3）位段(bit field)，位段成员必须声明为int、signed int或unsigned int类型，其次，在成员名的后面是一个冒号和一个整数，这个整数指定该位段所占用的位的数目。
+```
+struct CHAR
+{
+    unsigned ch : 7;
+    unsigned font : 6;
+    unsigned size : 19;
+};
+struct CHAR ch1;
+```
+（4）联合(union)，其所有成员引用的是内存中的相同位置。
+```
+union 
+{
+    float f;
+    int i;
+}fi;
+fi.f = 3.1415926;
+printf("%d\n",fi.i);   //将fi解释为int型
+```
+联合的长度就是最大成员的长度。
+
+###动态分配内存
+（1）C语言库提供了两个函数，malloc和free，分别用于执行动态内存分配和释放。
+```
+void *malloc(size_t size);   //函数原型
+void free(void *pointer);
+void *calloc(size_t num_elements, size_t element_size);  //返回指向内存的指针之前把它初始化为0
+void realloc(void *ptr, sizeof_t new_size);  //用于修改一个原先已经分配的内存块的大小
+```
+（2）malloc分配的是一块连续的内存，这些函数维护一个可用内存池，当被调用时，malloc从内存池中提取一块合适的内存。
+（3）动态内存分配最常见的错误就是忘记检查所请求的内存是否成功分配。
+```
+int *p;
+p = (int *)malloc(sizeof(int)*10);
+if (p == NULL)
+{
+    printf("Malloc fail");
+    exit(1);
+}
+```
+（4）当动态分配的内存不再需要使用时，它应该被释放，分配内存但在使用完毕后不释放将引起内存泄漏。
+*问题*
+>编写一个函数，从标准输入读取一-个字符串， 把字符串复制到动态分配的内存中，
+>并返回该字符串的拷贝。这个函数不应该对读入字符串的长度作任何限制!
