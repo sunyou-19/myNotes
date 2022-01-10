@@ -42,13 +42,22 @@ $ git reflog
 （3）`git reset HEAD git.md`可以将暂存区的修改撤销，重新放回工作区。
 6、rm 文件名 命令，将没用文件删了，使用该命令后使工作区和版本库不一致。
 （2）`git rm` 文件名 命令，将文件从版本库中删除，并`git commit`。当在工作区中删错了，使用`git checkout -- 文件名`使用版本库的文件替换工作区的文件.
-7、`ssh-keygen -t rsa -C “youemail@example.com”`，创建SSH Key。
-9、`git remote add origin https://github.com/sunyou-19/world.git`  命令将工作区与远程仓库连接，origin为远程库的名字
-10、`git push -u origin master` 将本地库的所有内容推送到远程库上。
-11、`git clone https://github.com/sunyou-19/world.git` 命令，克隆一个本地库。使用https速度慢，每次推送必须输入口令。还可以使用`git@github.com:sunyou-19/world.git` 地址。不同的协议。
+---
+###远程仓库
+（1）创建SSH Key，在.ssh目录（id_rsa和id_rsa.pub两个文件）
+（2）登录Github，打开"Settings"->"SSH Keys"->"Add SSH Key"，在文本框中粘贴id_rsa.pub文件的内容。
+1、`ssh-keygen -t rsa -C “youremail@example.com”`，创建SSH Key。
+2、`git remote add origin https://github.com/sunyou-19/world.git`  命令将工作区与远程仓库连接，origin为远程库的名字。在Github上创建一个仓库，使用该命令，将本地仓库与之关联。
+3、`git push -u origin master` 将本地库的所有内容推送到远程库上。
+4、`git remote -v`查看远程库信息，`git remote rm origin` 删除远程库origin。
+4、`git clone https://github.com/sunyou-19/world.git` 命令，克隆一个本地库。使用https速度慢，每次推送必须输入口令。还可以使用`git@github.com:sunyou-19/world.git` 地址。不同的协议。
 
 ---
 ###分支管理
+
+
+（1）主分支为master分支，HEAD指向master，master指向提交(commit)。
+
 
 ![](./images/git_branch.png)
 1、创建分支，例如dev，git创建了一个指针名为dev，指向master相同的提交，再将HEAD指向dev，表示当前分支在dev上。
@@ -66,7 +75,7 @@ $ git reflog
 （4） `git checkout master` 分支工作完成后，切换master。
 （5） `git merge dev` 命令，将dev分支工作合并到master。
 （6） `git branch -d dev` 命令，删除dev分支。
-6、 `git switch -c` 分支名 命令，切换分支。
+6、 `git switch -c 分支名` 命令，创建并切换分支。
 7、当在一个分支修改后，提交到暂存区，切换到master分支，修改同样的文件，并提交到暂存区，当两个分支合并时发生冲突。
 8、查看文件的内容，对冲突的部分进行修改，提交。
 9、`git merge --no-ff -m “merge with no-ff” dev` 命令，表示禁用Fast Forward模式，不会删除分支。
