@@ -1,4 +1,6 @@
-###创建版本库
+[toc]
+<!--生成目录-->
+### 创建版本库
 （1）创建空目录，mkdir 文件名，cd 文件名，pwd（pwd命令用于显示当前目录）。
 （2）`git init` 命令把这个目录变成Git可以管理的仓库
 （3）创建一个文件将文件放在仓库目录下
@@ -31,6 +33,7 @@ $ git reflog
 9a26f6e (HEAD -> master) HEAD@{2}: reset: moving to 9a26f6e927
 72d0624 HEAD@{3}: reset: moving to HEAD^
 ```
+
 2、工作区（Working Directory），一个设置为仓库的文件夹就是一个工作区。
 3、版本仓库（Repository），工作区中，一个隐藏目录.git，是Git的版本库。存储stage（暂存区），Git自动创建的第一个分支master，以及指向master的一个指针HEAD。
  ![版本仓库](./images/git_master.png)
@@ -42,8 +45,10 @@ $ git reflog
 （3）`git reset HEAD git.md`可以将暂存区的修改撤销，重新放回工作区。
 6、rm 文件名 命令，将没用文件删了，使用该命令后使工作区和版本库不一致。
 （2）`git rm` 文件名 命令，将文件从版本库中删除，并`git commit`。当在工作区中删错了，使用`git checkout -- 文件名`使用版本库的文件替换工作区的文件.
+
 ---
-###远程仓库
+
+### 远程仓库
 （1）创建SSH Key，在.ssh目录（id_rsa和id_rsa.pub两个文件）
 （2）登录Github，打开"Settings"->"SSH Keys"->"Add SSH Key"，在文本框中粘贴id_rsa.pub文件的内容。
 1、`ssh-keygen -t rsa -C “youremail@example.com”`，创建SSH Key。

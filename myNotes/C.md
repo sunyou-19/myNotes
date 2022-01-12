@@ -1,4 +1,5 @@
-/*
+[toc]
+---
 1、 gets函数从标准输入读取一行文本并把它存储于作为参数传递给它的数组中。一行输入由一串字符组成，以一个换行符('\n')结尾gets函数丢弃换行符，并在该行的末尾存储一个NUL字节（一个NUL字节是指字节模式为全零的字节，类似'\0'这样的字符常量）。然后，gets函数返回一个非NULL值，表示该行已被成功读取。当gets函数被调用但事实上不存在输入行，它就返回NULL值，表示它到达了输入的末尾。
 
 2、 getchar函数从标准输入读取一个字符并返回它的值。如果输入中不再存在任何字符，函数就会返回常量EOF，用于提示文件的结尾。
@@ -33,7 +34,7 @@ enum Jar_Type {CUP,PINT,QUART,HALF_GALLON,GALLON};
 internal：在同一个源文件内的所有声明中都指同一个实体，但位于不同源文件多个声明分属不同的实体
 external链接属性的标识符：该标识符的所有声明都属于同一个实体。
 （3）关键字extern和static用于在声明中修改标识符的链接属性。
-static可修改变量为intenal链接属性
+static可修改变量为intenal链接属性。静态变量只会被初始化一次。
 （4）存储类型：普通内存，运行时堆栈，硬件寄存器
 凡是在任何代码块之外声明的变量总是存储于静态内存中
 在代码块内部声明的变量是存储于堆栈中
@@ -63,7 +64,7 @@ int **q = &p;
 *问题*：`float a = 0.1; //机器如何完成真值到float的转化`
 12、stdarg宏，可变参数列表通过宏来实现，这些宏定义于stdarg.h文件中，
 这个头文件声明了一个类型va_list和三个宏——va_start、va_arg和va_end
-13、**数组**
+#### 13、数组
 （1）声明一个数组时，编译器将根据声明所指定的元素数量为数组保留内存空间，然后再创建数组名，它的值是一个常量，指向这段空间的起始地址。声明一个指针变量时，编译器只为指针本身保留内存空间，它并不为任何类型值分配内存空间。
 （2）静态数组初始化为零，自动变量数组如果没有显式初始化，其值不为0。
 （3）字符数组的初始化；
@@ -72,8 +73,9 @@ char message[] = {'h','e','l','o',0};
 char message[] = "hello";  //字符数组
 char *message = "Hello";   //字符串常量，不可被修改
 ```
-14、**指针与数组**
-```
+#### 14、指针与数组
+（1）当数组作为函数的形参时会降为指针，在32位系统中，指针类型占4个字节。
+```c
 int (*p)[10];  //相当于二维数组
 int *p[10];  //指针数组，数组元素为int指针类型。
 const char keywords[] = {"abc","how","what"};
@@ -81,16 +83,16 @@ int len = sizeof(keywords)/sizeof(keywords[0]); //通过sizeof可以求数组长
 ```
 *问题*
 >变量array1和array2有什么区别
-```
+```c
 void function(int array1[10])
 {
     int array2[10];
 }
 int const a[] = {1,2,3,4};   //array read-only
 ```
-15、字符串、字符和字节
+#### 15、字符串、字符和字节
 （1）库函数strlen的原型：`size_t strlen(char const *string)`，size_t是一个无符号整数类型。
-```
+```c
 char *x = "balabala";
 if (strlen(x) - 10 >= 0)  //左式为无符号数
 ```
@@ -102,13 +104,13 @@ dest必须是字符数组或者是一个指向动态分配内存的数组指针�
 （4）字符串比较strcmp，比较两个字符串对应的字符逐个进行比较，直到发现不匹配为止，
 `int strcmp(char const *s1, char const *s2)`
 如果s1小于s2，strcmp函数返回一个小于零的值，如果s1大于s2，函数返回一个大于零的值，如果两个字符串相等，函数就返回零。
-```
+```c
 char *strncpy(char *dst, char const *src, size_t len);         //其结果不会以NUL字节结尾  
 char *strncat(char *dst, char const *src, size_t len);
 int strncmp(char const *s1, char const *s2,size_t len);
 ```
 （5）查找一个字符strchr和strrchr函数
-```
+```c
 char *strchr(char const *str, int ch);   //return a pointer to the first occurrence of ch, return NULL if ch is not in str;
 char *strrchr(char const *str, int ch);  //return a pointer to the last occurrence of ch, return NULL if ch is not in str;
 ```
@@ -118,7 +120,7 @@ char *strrchr(char const *str, int ch);  //return a pointer to the last occurren
 `char *strstr(char const *s1, char const *s2); `
 在s1中查找整个s2第1次出现的起始位置，并返回一个指向该位置的指针，如果s2没有在s1中出现，函数返回一个NULL指针。如果第二个参数是一个空字符串，函数就返回s1。
 （8）查找一个字符串前缀strspn和strcspn函数
-```
+```c
 size_t strspn(char const *str, char const *group);    //group字符串指定一个或多个字符，strspn返回str起始部分匹配group中任意字符的字符数。
 size_t strcspn(char const *str, char const *group);
 ``` 
@@ -129,28 +131,28 @@ strtok找到str的下一个标记，并将其用NUL结尾，然后返回一个�
 （10）字符分类
 ![](images/QQ截图20220110085314.png)
 （11）字符转换
-```
+```c
 int tolower(int ch);
 int toupper(int ch);
 ```
 （12）内存操作。根据定义，字符串由一个NUL字节结尾，所以字符串内部不能包含任何NUL字符。
-```
+```c
 void *memcpy(void *dst, void const *src,size_t length);
 void *memmove(void *dst, void const *src,size_t length);
 void *memcmp(void const *a, void const *b,size_t length);
 void *memchr(void const *a, int ch,size_t length);
 void *memset(void *a, int ch, size_t length);
 ```
-###结构与联合
+### 结构与联合
 
-```
+```c
 struct abc{};   //abc是标签
 typedef struct {}abcd;   //adcd是类型名
 ```
 （1）结构变量的成员是通过点操作符(.)访问的，点操作符接受两个操作数，左操作数就是结构变量的名字，右操作数就是需要访问的成员的名字。
 （2）结构的存储分配
 （3）位段(bit field)，位段成员必须声明为int、signed int或unsigned int类型，其次，在成员名的后面是一个冒号和一个整数，这个整数指定该位段所占用的位的数目。
-```
+```c
 struct CHAR
 {
     unsigned ch : 7;
@@ -160,7 +162,7 @@ struct CHAR
 struct CHAR ch1;
 ```
 （4）联合(union)，其所有成员引用的是内存中的相同位置。
-```
+```c
 union 
 {
     float f;
@@ -173,7 +175,7 @@ printf("%d\n",fi.i);   //将fi解释为int型
 
 ###动态分配内存
 （1）C语言库提供了两个函数，malloc和free，分别用于执行动态内存分配和释放。
-```
+```c
 void *malloc(size_t size);   //函数原型
 void free(void *pointer);
 void *calloc(size_t num_elements, size_t element_size);  //返回指向内存的指针之前把它初始化为0
@@ -181,7 +183,7 @@ void realloc(void *ptr, sizeof_t new_size);  //用于修改一个原先已经分
 ```
 （2）malloc分配的是一块连续的内存，这些函数维护一个可用内存池，当被调用时，malloc从内存池中提取一块合适的内存。
 （3）动态内存分配最常见的错误就是忘记检查所请求的内存是否成功分配。
-```
+```c
 int *p;
 p = (int *)malloc(sizeof(int)*10);
 if (p == NULL)
@@ -194,3 +196,122 @@ if (p == NULL)
 *问题*
 >编写一个函数，从标准输入读取一-个字符串， 把字符串复制到动态分配的内存中，
 >并返回该字符串的拷贝。这个函数不应该对读入字符串的长度作任何限制!
+
+### 高级指针
+
+```c
+int (*f)();   //f为函数指针
+int (*f[])();  //f为数组，数组元素的类型是函数指针
+```
+（1）函数指针的用途：转换表和作为参数传递给另一个函数。 
+```C
+int (*pf)(int) = &f;
+int ans;
+ans = f(25);       //函数的三种调用方式
+ans = (*pf)(25);
+ans = pf(25);
+```
+（2）回调函数，使函数与类型无关，使用函数指针。
+
+```c
+Node *search_list(Node *node, void const *value, int (*compare)(void const *, void const *))
+{
+    while (node != NULL)
+    {
+        if (compare(&node->value, value) == 0)
+            break;
+        node = node->link
+    }
+    return node;
+}
+
+int compare_ints(void const *a, void const *b)
+{
+    if (*(int *)a == *(int *)b)
+        return 0;
+    else
+        return 1;
+}
+desired_node = search_list(root, &desired_value,compare_ints);
+```
+
+（3）转换表，使用函数指针代替转换表
+```c
+double add(double, double);
+double sub(double, double);
+double mul(double, double);
+double div(double, double);
+
+double (*oper_func[])(double, double) = {add,sub,mul,div};
+
+result = oper_func[oper](op1,op2);
+```
+
+（4）命令行参数，main函数有两个形参，第一个为argc，它表示命令行参数的数目，第二个为argv，它指向一组参数值。
+
+（5）字符串常量，它的值是个指针常量，
+```c
+printf("%d\n","xyz");
+output: 4210765
+```
+
+### 预处理器
+
+| 符号  | 样例值    |  含义  |
+|:----:|:----:|:----:|
+| __FILE\_\_  |  "name.c"  | 进行编译的源文件名 |
+| __LINE\_\_ | 25 | 文件当前行的行号|
+| __DATE\_\_ | "Jan 31 1997"| 文件被编译的日期 |
+| __TIME\_\_ | "18:04:30"| 文件被编译的时间 |
+| __STDC\_\_| 1 | 如果编译器遵循ANSI C，其值就为1，否则未定义 |
+
+（2）`#define`允许将参数替换到文本中，这种实现通常称为宏
+`#define name(parameter-list) stuff` 
+一些任务不能用函数实现。如
+```
+#define MALLOC（n, type）( (type *)malloc( (n) * sizeof (type) ) )
+```
+（3）`undef name`用于移除一个宏定义。  
+（4）条件编译，可以选择代码的一部分是被正常编译还是完全忽略
+```c
+#if constant-expression
+    statements
+#endif
+//constant-expression为常量表达式
+```
+（4）嵌套文件
+```c
+#ifndef _ABC_H
+#define _ABC_H
+.......
+#endif
+
+#error text of error message   //允许你生成错误信息
+```
+
+### 输入输出
+
+（1）`void perror(char const *message);`简化向用户报告特定错误的过程。标准库函数在一个外部整型变量errno中保存错误代码之后，把这个信息传递给用户程序，提示操作失败的原因。
+（2）`void exit(int status);`用于终止一个程序的执行。
+（3）流，读取和写入是从一块缓冲区（buffer）的内存区中复制数据。分为两种类型：文本流和二进制流。每个ANSIC程序，运行时必须提供至少三个流——标准输入(stdin)、标准输出(stdout)和标准错误(stderr)，它们都是一个指向FILE结构的指针。
+（4）打开文件
+1. 为每个文件声明指针变量，其类型为`FILE *`。
+2. 流通过调用fopen函数打开，同时指定需要访问的文件或设备以及它们的访问方式（例如，读、写或者既读又写）
+3. 根据需要对该文件进行读取或写入
+4. 最后调用fclose函数关闭流。
+     
+**执行字符、文本行和二进制I/O的函数**
+| 数据类型 | 输入   |  输出  |  描述  |
+|:----:|:----:|:----:|:----:|
+| 字符  |  $getchar$  |  $putchar$  | 读取（写入）单个字符   |
+| 文本行  | $gets$ $scanf$   |  $puts$ $printf$  |  文本行末格式化的输入（输出）  格式化的输入（输出）  |
+| 二进制数据 |  $fread$  |  $fwrite$  |  读取（写入）二进制数据  |
+
+（5）打开流，`FILE *fopen(char const *name, char const *mode);`
+（6）关闭流，`int fclose(FILE *f);`
+    **mode**
+|  | 读取 | 写入 | 添加 |
+|----|----|----|----|
+| 文本 | "r" | "w" | "a" |
+| 二进制 | "rb" | "wb" | "ab" |
+
